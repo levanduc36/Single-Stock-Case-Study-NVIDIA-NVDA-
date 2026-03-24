@@ -15,21 +15,32 @@ try:
     file_path = "HistoricalData_1754061510662.csv" 
     df = pd.read_csv(file_path)
 
+    print("1. Initial column name:", df.columns.tolist())
+
     # Standardize column names
     if 'Close/Last' in df.columns:
         df.rename(columns={'Close/Last': 'Close'}, inplace=True)
     df.columns = df.columns.str.strip()
 
-    # Remove '$' sign and convert columns to numeric
-    cols_to_fix = ['Close', 'Open', 'High', 'Low']
-    for col in cols_to_fix:
-        if col in df.columns and df[col].dtype == 'object':
-            df[col] = df[col].astype(str).str.replace('$', '', regex=False)
-            df[col] = pd.to_numeric(df[col])
+    # CLEAN ALL IN ONE (QUAN TRỌNG NHẤT)
+    df.replace({r'\$': '', ',': ''}, regex=True, inplace=True)
+
+    # Convert to numeric
+    cols = ['Close', 'Open', 'High', 'Low', 'Volume']
+    for col in cols:
+        if col in df.columns:
+            df[col] = pd.to_numeric(df[col], errors='coerce')
+
+    # Drop NaN sau khi clean
+    df.dropna(inplace=True)
 
     # Set Date as Index
     df["Date"] = pd.to_datetime(df["Date"])
     df = df.set_index("Date").sort_index()
+
+    print(" Data Cleaned")
+    print(df.dtypes)
+    print(f"   Data from: {df.index.min().date()} đến {df.index.max().date()}")
 
     # Calculate Log Returns
     df['Log_Return'] = np.log(df['Close'] / df['Close'].shift(1))
