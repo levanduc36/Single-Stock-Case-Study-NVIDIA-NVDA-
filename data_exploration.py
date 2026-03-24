@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-# Cấu hình hiển thịpy
+# Cấu hình hiển thị py
 sns.set_theme(style="whitegrid")
 plt.rcParams['figure.figsize'] = (12, 6)
 
@@ -26,10 +26,14 @@ try:
     # 3. Xử lý ký tự '$' trong các cột giá và chuyển sang số (float)
     cols_to_fix = ['Close', 'Open', 'High', 'Low']
     for col in cols_to_fix:
-        if col in df.columns and df[col].dtype == 'object':
+        if col in df.columns:
             df[col] = df[col].astype(str).str.replace('$', '', regex=False)
-            df[col] = pd.to_numeric(df[col]) # Chuyển thành số
-            print(f"   -> Handled character '$' in column {col}")
+            df[col] = pd.to_numeric(df[col], errors='coerce')
+        print(f"   -> Handled character '$' in column {col}")
+
+    if 'Volume' in df.columns:
+        df['Volume'] = df['Volume'].astype(str).str.replace(',', '', regex=False)
+        df['Volume'] = pd.to_numeric(df['Volume'], errors='coerce')
 
     # 4. Xử lý ngày tháng
     df["Date"] = pd.to_datetime(df["Date"])
