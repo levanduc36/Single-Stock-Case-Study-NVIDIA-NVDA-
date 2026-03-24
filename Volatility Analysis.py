@@ -8,12 +8,10 @@ from statsmodels.graphics.tsaplots import plot_acf, plot_pacf
 sns.set_theme(style="whitegrid")
 plt.rcParams['figure.figsize'] = (14, 6)
 
-# ==========================================
 # 1. TẢI DỮ LIỆU & LÀM SẠCH (DATA CLEANING)
-# ==========================================
 try:
     # Thay tên file bằng đúng tên file bạn tải lên
-    file_path = "HistoricalData_1754061510662 (1).csv"
+    file_path = "HistoricalData_1754061510662.csv"
     df = pd.read_csv(file_path)
 
     # --- BƯỚC SỬA LỖI QUAN TRỌNG ---
@@ -35,12 +33,10 @@ try:
     df["Date"] = pd.to_datetime(df["Date"])
     df = df.set_index("Date").sort_index()
     
-    print("✅ Làm sạch dữ liệu thành công!")
+    print(" Làm sạch dữ liệu thành công!")
     print(f"   Dữ liệu từ: {df.index.min().date()} đến {df.index.max().date()}")
 
-    # ==========================================
     # 2. FEATURE ENGINEERING (TẠO BIẾN MỚI)
-    # ==========================================
     # Tính Lợi suất Log (Log Returns)
     df['Log_Return'] = np.log(df['Close'] / df['Close'].shift(1))
     
@@ -50,15 +46,13 @@ try:
     # Bình phương lợi suất (Squared Returns) đại diện cho độ lớn rủi ro
     df['Squared_Return'] = df['Log_Return'] ** 2
     
-    print("✅ Feature engineering hoàn tất!")
+    print(" Feature engineering hoàn tất!")
 
 except Exception as e:
-    print(f"❌ Lỗi: {e}")
+    print(f" Lỗi: {e}")
 
-# =====================================================================
 # BIỂU ĐỒ 1: BIẾN ĐỘNG THỰC TẾ HÀNG NĂM (ANNUALIZED REALIZED VOLATILITY)
-# =====================================================================
-print("\n📊 Vẽ biểu đồ 1: Biến động thực tế hàng năm...")
+print("\n Vẽ biểu đồ 1: Biến động thực tế hàng năm...")
 
 window = 21
 trading_days = 252
@@ -74,10 +68,8 @@ plt.tight_layout()
 plt.show()
 # plt.savefig('1_realized_volatility.png', dpi=300)
 
-# =====================================================================
 # BIỂU ĐỒ 2: CÁC CHẾ ĐỘ BIẾN ĐỘNG (VOLATILITY REGIMES)
-# =====================================================================
-print("📊 Vẽ biểu đồ 2: Phân vùng chế độ biến động...")
+print(" Vẽ biểu đồ 2: Phân vùng chế độ biến động...")
 
 # Xác định ngưỡng Tứ phân vị
 vol_q25 = df['Realized_Vol'].quantile(0.25)
@@ -105,10 +97,8 @@ plt.tight_layout()
 plt.show()
 # plt.savefig('2_volatility_regimes.png', dpi=300)
 
-# =====================================================================
 # BIỂU ĐỒ 3: BÌNH PHƯƠNG LỢI SUẤT (SQUARED RETURNS - VOLATILITY CLUSTERING)
-# =====================================================================
-print("📊 Vẽ biểu đồ 3: Bình phương lợi suất...")
+print(" Vẽ biểu đồ 3: Bình phương lợi suất...")
 
 plt.figure(figsize=(14, 5))
 plt.plot(df.index, df['Squared_Return'], color='purple', alpha=0.8, linewidth=1.2)
@@ -125,10 +115,8 @@ plt.tight_layout()
 plt.show()
 # plt.savefig('3_squared_returns.png', dpi=300)
 
-# =====================================================================
 # BIỂU ĐỒ 4: ACF CỦA BÌNH PHƯƠNG LỢI SUẤT (ARCH EFFECT DETECTION)
-# =====================================================================
-print("📊 Vẽ biểu đồ 4: ACF của bình phương lợi suất...")
+print(" Vẽ biểu đồ 4: ACF của bình phương lợi suất...")
 
 fig, ax = plt.subplots(figsize=(12, 5))
 _ = plot_acf(df['Squared_Return'], ax=ax, lags=40, color='darkred', alpha=0.05)
@@ -141,10 +129,8 @@ plt.tight_layout()
 plt.show()
 # plt.savefig('4_acf_squared_returns.png', dpi=300)
 
-# =====================================================================
 # BIỂU ĐỒ 5: ACF & PACF CỦA BÌNH PHƯƠNG LỢI SUẤT (KIỂM ĐỊNH HIỆU ỨNG ARCH)
-# =====================================================================
-print("📊 Vẽ biểu đồ 5: ACF & PACF của bình phương lợi suất...")
+print(" Vẽ biểu đồ 5: ACF & PACF của bình phương lợi suất...")
 
 fig, axes = plt.subplots(1, 2, figsize=(16, 5))
 
@@ -164,7 +150,7 @@ plt.tight_layout()
 plt.show()
 # plt.savefig('5_arch_effect_acf_pacf.png', dpi=300)
 
-print("\n✅ Hoàn tất phân tích biến động!")
+print("\n Hoàn tất phân tích biến động!")
 
 # 3. TRANG TRÍ TIÊU ĐỀ CHO ĐẸP ĐỂ ĐƯA LÊN SLIDE
 ax.set_title('ACF của Bình phương Lợi suất (Squared Returns)', fontsize=14, fontweight='bold')
@@ -179,8 +165,8 @@ plt.tight_layout()
 plt.show()
 
 from statsmodels.graphics.tsaplots import plot_acf, plot_pacf
+
 # BIỂU ĐỒ 2: KIỂM ĐỊNH HIỆU ỨNG ARCH (ACF & PACF CỦA SQUARED RETURNS)
-# =====================================================================
 fig, axes = plt.subplots(1, 2, figsize=(16, 5))
 
 # Đồ thị ACF (Autocorrelation Function)
