@@ -9,12 +9,10 @@ from statsmodels.graphics.tsaplots import plot_acf, plot_pacf
 sns.set_theme(style="whitegrid")
 plt.rcParams['figure.figsize'] = (14, 6)
 
-# ==========================================
 # 1. DATA LOADING & CLEANING
-# ==========================================
 try:
     # Replace with your actual file path
-    file_path = "HistoricalData_1754061510662 (1).csv" 
+    file_path = "HistoricalData_1754061510662.csv" 
     df = pd.read_csv(file_path)
 
     # Standardize column names
@@ -37,14 +35,12 @@ try:
     df['Log_Return'] = np.log(df['Close'] / df['Close'].shift(1))
     df.dropna(inplace=True) # Remove the first row (NaN)
 
-    print("✅ Data is ready for plotting!")
+    print(" Data is ready for plotting!")
 
 except Exception as e:
-    print(f"❌ Error: {e}")
+    print(f" Error: {e}")
 
-# ==========================================
 # 2. EDA PLOTS
-# ==========================================
 
 # --- PLOT 1: Price Trend & Rolling Mean ---
 window_size = 20 # 20 days (approx. 1 trading month)

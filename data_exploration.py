@@ -3,16 +3,14 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-# Cấu hình hiển thị
+# Cấu hình hiển thịpy
 sns.set_theme(style="whitegrid")
 plt.rcParams['figure.figsize'] = (12, 6)
 
-# ==========================================
 # 1. TẢI DỮ LIỆU & LÀM SẠCH (DATA CLEANING)
-# ==========================================
 try:
     # Thay tên file bằng đúng tên file bạn tải lên
-    file_path = "C:\\Users\\htc\\Desktop\\notebook\\Kì 4\\TIme series\\HistoricalData_1754061510662.csv"
+    file_path = r"HistoricalData_1754061510662.csv"
     df = pd.read_csv(file_path)
 
     print("1. Initial column name:", df.columns.tolist())
@@ -37,12 +35,10 @@ try:
     df["Date"] = pd.to_datetime(df["Date"])
     df = df.set_index("Date").sort_index()
     
-    print("✅ Data Cleaned")
+    print(" Data Cleaned")
     print(f"   Data from: {df.index.min().date()} đến {df.index.max().date()}")
 
-    # ==========================================
     # 2. FEATURE ENGINEERING (TẠO BIẾN MỚI)
-    # ==========================================
     # Tính Lợi suất Log (Log Returns)
     df['Log_Return'] = np.log(df['Close'] / df['Close'].shift(1))
     
@@ -52,9 +48,7 @@ try:
     # Loại bỏ dòng đầu tiên bị NaN
     df.dropna(inplace=True)
 
-    # ==========================================
     # 3. THỐNG KÊ & TRỰC QUAN HÓA
-    # ==========================================
     print("\n--- Descriptive Statistics ---")
     print(df[['Close', 'Log_Return']].describe().round(4))
 
@@ -74,4 +68,4 @@ try:
     plt.show()
 
 except Exception as e:
-    print(f"❌ Error: {e}")
+    print(f" Error: {e}")
